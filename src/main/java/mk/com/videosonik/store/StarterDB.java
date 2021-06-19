@@ -1,9 +1,9 @@
 package mk.com.videosonik.store;
 
-import lombok.AllArgsConstructor;
 import mk.com.videosonik.store.model.*;
 import mk.com.videosonik.store.repository.JPA.*;
 import mk.com.videosonik.store.service.CartService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -11,21 +11,29 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Component
-@AllArgsConstructor
 public class StarterDB {
+
+    @Value("${admin.username}")
+    private String adminUsername;
+
+    @Value("${admin.password}")
+    private String adminPassword;
+
+    @Value("${admin.email}")
+    private String adminEmail;
 
     List<Review> reviewList;
     List<Cart>cartList;
     List<User>userList;
     List<Product>productList;
 
-    private final CartRepositoryJPA cartRepositoryJPA;
-    private final ProductRepositoryJPA productRepositoryJPA;
-    private final ReviewRepositoryJPA reviewRepositoryJPA;
-    private final UserRepositoryJPA userRepositoryJPA;
-    private final AdminRepositoryJPA adminRepositoryJPA;
+    private CartRepositoryJPA cartRepositoryJPA;
+    private ProductRepositoryJPA productRepositoryJPA;
+    private ReviewRepositoryJPA reviewRepositoryJPA;
+    private UserRepositoryJPA userRepositoryJPA;
+    private AdminRepositoryJPA adminRepositoryJPA;
 
-    private final CartService cartService;
+    private CartService cartService;
 
     @PostConstruct
     public void init() {
@@ -33,7 +41,7 @@ public class StarterDB {
         productList = new LinkedList<>();
         cartList = new LinkedList<>();
         reviewList = new LinkedList<>();
-        User user = new User("testest", "emailot", "paswrd", new LinkedList<>());
+        User user = new User(adminUsername, adminEmail, adminPassword, new LinkedList<>());
 //        Product product = new Product("123", 200, "img", "descrptioasdo", "keywrds", 5,"LED");
 
 //        userList.add(user);
