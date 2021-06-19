@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping(path = "/authenticate")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class AuthenticateREST {
 
