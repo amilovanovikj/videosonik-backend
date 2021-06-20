@@ -4,6 +4,7 @@ import mk.com.videosonik.store.model.*;
 import mk.com.videosonik.store.repository.JPA.*;
 import mk.com.videosonik.store.service.CartService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -27,10 +28,15 @@ public class StarterDB {
     List<User>userList;
     List<Product>productList;
 
-    private CartRepositoryJPA cartRepositoryJPA;
-    private ProductRepositoryJPA productRepositoryJPA;
-    private ReviewRepositoryJPA reviewRepositoryJPA;
-    private UserRepositoryJPA userRepositoryJPA;
+    // @Autowired
+    // private CartRepositoryJPA cartRepositoryJPA;
+    // @Autowired
+    // private ProductRepositoryJPA productRepositoryJPA;
+    // @Autowired
+    // private ReviewRepositoryJPA reviewRepositoryJPA;
+    // @Autowired
+    // private UserRepositoryJPA userRepositoryJPA;
+    @Autowired
     private AdminRepositoryJPA adminRepositoryJPA;
 
     private CartService cartService;
