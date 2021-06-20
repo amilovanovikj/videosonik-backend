@@ -1,37 +1,13 @@
-VIDEOSONIK
-Admin account:
-username: test
-password: test
+# Videosonik Backend App
 
-Za da se startuva aplikacijata se poterbni slednive preduslovi
-application.properties:
-spring.datasource.url=jdbc:postgresql://localhost:5432/videosonik
-spring.datasource.username=postgres
-spring.datasource.password=mouseav555
+This repository is a Dockerized and somewhat modified version of the following app: [vavramovski/videosonik-new](https://github.com/vavramovski/videosonik-new). 
 
-Dump file na POSTGRES bazata se naogja vo dbexport.pqsql
-Prvo treba da napravite baza so ime videosonik,a potoa importnete ja so slednava komanda
-pg_dump -U postgres videosonik < "lokacijata na dbexport.pqsql"
+Huge thanks to [vavramovski](https://github.com/vavramovski) for letting me use this app for my [Ansible/Docker project](https://github.com/amilovanovikj/videosonik-devops).
 
+## What was changed
 
-VIDEOSONIK Spring Boot aplikacija koja koristi
-Spring Security za delot so login vklucuvajki i JWT token,
-Spring data za polesni operacii so bazata.
-Strogo e zapazena sloevitata arhitektura.
-
-Funkcionalnosti na aplikacijata:
-Aplikacija ima 10 tabeli, 1 od niv e so MN relacija (Users M<>N Wishlist),
-poveketo od niv se razlozheni bidejki samata relacija sodrzhi vrednost vo nea kako na primer relacijata Cart(Users M< quantity >N Product)
-Postojat i enumeraciski tabeli koi za sega sodrzhat samo 2 vrednosti(admin, sales) koi ne igraat uloga zasega.
-Backend validacija i avtentikacija na korisnik.
-Dokolku korisnikot e admin ima pravo na add/edit/remove operacii nad produktite i ima pristap do kontakt porakite prateni do sluzhbata.
-Pokraj bonus privilegiite, kako i adminot taka i sekoj korisnik, ima svoja koshnica (cart) i svoj lista od posakuvani proizvodi (wishlist),
-vo koi mozhe da dodava i odzema produkti, zgolemuva i namaluva kolichini i slichno.
-Ponudena e paginacija i ednostaven search mehanizam.
-Zasega e napraveno site produkti od bazata da se loadiraat na otvoranje na aplikacijata, so cel pogobro korisnicko iskustvo
-bidejki e predvideno da ima mal broj na produkti.No dokolku skalira brojot na produkti, ke ja koristam backend paginacijata koja veke postoi no ne se koristi.
-
-Vo delot Contact, sekoj moze da isprati poraka do sluzhbata koja potoa ke se pokaze kaj onie korisnici koi se so Admin privilegii.
-Delot Projects e vo izrabotka i celta e da bide mal CMS kade Admin korisnicite ke mozhat da postavuvaat sliki i nekakov tekst okolu dejnosta so koja se bavi kompanijata (bidejki kompanijata ne e samo obichna prodavnica).
-
-Ovoj produkt e so mali izmeni okolu bezbednosta e namenet da izleze vo produkcija.
+- All package and deploy operations, as well as server setup, are done using [Ansible playbooks](https://github.com/amilovanovikj/videosonik-devops/tree/master/playbooks).
+- Added the [Dockerfile](https://github.com/amilovanovikj/videosonik-backend/blob/master/Dockerfile) where I use multi-stage build to first package this app using Maven based image, and then run it in a lightweight, OpenJDK based Docker container.
+- During deploy time, the app reads the admin account credentials and database connection properties from an [Ansible vault](https://github.com/amilovanovikj/videosonik-devops/tree/master/playbooks/vault).
+- During deploy time, the [application properties](https://github.com/amilovanovikj/videosonik-backend/blob/master/src/main/resources/application.properties) are changed by Ansible to configure the app to use the production database, using [this Jinja2 template](https://github.com/amilovanovikj/videosonik-devops/blob/master/playbooks/templates/application.properties.j2).
+- During deploy time, multiple containers of this app are created, alongiside a load balancer that distributes the traffic between them, using a [Docker compose file](https://github.com/amilovanovikj/videosonik-devops/blob/master/playbooks/templates/docker-compose.yml.j2).
